@@ -3,7 +3,6 @@
  */
 const presenter = require('./presenter');
 const statusCode = require('./statusCode');
-
 presenter.getPresenterByID = (ID, throwOnNull) => {
     return presenter.findById(ID)
         .catch((e) => {
