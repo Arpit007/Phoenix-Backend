@@ -2,7 +2,8 @@
   "appName": "Phoenix: Debug",
   "port": 3100,
   "dbConfig": {
-    "url": "mongodb://localhost:27017/Phoenix"
+    "url": "mongodb://localhost:27017",
+    "db": "Phoenix"
   },
   "root": {
     "userName": "StarkX",

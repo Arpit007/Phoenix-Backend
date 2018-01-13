@@ -3,6 +3,7 @@
  */
 const express = require('express');
 const router = express.Router();
+
 const SendOtp = require('sendotp');
 const sendOtp = new SendOtp('193031Aw2btqWboT55a5a357f');
 
