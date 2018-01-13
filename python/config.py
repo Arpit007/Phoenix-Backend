@@ -1,6 +1,7 @@
 import os
 import json
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 if 'PY_ENV' in os.environ:
     debugMode = os.environ['PY_ENV'] == 'development'

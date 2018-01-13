@@ -1,84 +1,75 @@
 import pandas as pd
 
-dataset = pd.read_csv('data.tsv', sep='\t', quoting=3)
+dataset = pd.read_csv('data1.tsv', delimiter='\t', quoting=3)
 
 import re
+import nltk
 from nltk.corpus import stopwords
+import pickle
 from nltk.stem.porter import PorterStemmer
+#
+# corpus = []
+# for i in range(0, len(dataset)):
+#     review = re.sub('[^a-zA-Z]', ' ', dataset['Review'][i])
+#     review = review.lower()
+#     review = review.split()
+#     ps = PorterStemmer()
+#     review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+#     review = ' '.join(review)
+#     corpus.append(review)
+#
+# from sklearn.feature_extraction.text import CountVectorizer
+#
+# cv = CountVectorizer(max_features=1500)
+# cv.fit(corpus)
+# X = cv.transform(corpus).toarray()
+# y = dataset.iloc[:, 1].values
+#
+# from sklearn.cross_validation import train_test_split
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10, random_state=0)
+#
+# from sklearn.metrics import confusion_matrix
+# from sklearn.linear_model import LogisticRegression
+#
+# classifier = LogisticRegression(random_state=120)
+# classifier.fit(X_train, y_train)
+# y_pred = classifier.predict(X_test)
+# cm = confusion_matrix(y_test, y_pred)
+# Accuracy = (cm[0, 0] + cm[1, 1]) / sum(sum(cm))
+# Precision = cm[1, 1] / (cm[0, 1] + cm[1, 1])
+# Recall = cm[0, 0] / (cm[0, 0] + cm[1, 0])
+# F1Score = 2 * Precision * Recall / (Precision + Recall)
+#
+# print('Name', 'Accuracy', 'Precision', 'Recall', 'F1 Score', sep='\t')
+# print(Accuracy, Precision, Recall, F1Score, sep='\t')
+#
+# with open('classifier.pkl', 'wb') as fid:
+#     pickle.dump(classifier, fid)
+# with open('vec.pkl', 'wb') as fid:
+#     pickle.dump(cv, fid)
 
-stopwords = set(stopwords.words('english'))
-ps = PorterStemmer()
+with open('classifier.pkl', 'rb') as f:
+    classifier = pickle.load(f)
+with open('vec.pkl', 'rb') as f:
+    cv = pickle.load(f)
 
-corpus = []
-for i in range(len(dataset)):
-    review = re.sub('[^a-zA-Z]', ' ', dataset['Review'][i])
-    review = review.lower()
-    review = review.split()
-    review = [ps.stem(word) for word in review if word not in stopwords]
-    review = ' '.join(review)
-    corpus.append(review)
+def Analyse(text):
+    text = re.sub('[^a-zA-Z]', ' ', text)
+    text = text.lower()
+    text = text.split()
+    ps = PorterStemmer()
+    text = [ps.stem(word) for word in text if not word in set(stopwords.words('english'))]
+    text = ' '.join(text)
+    x = cv.transform([text])
+    pred = classifier.predict((x))
+    return pred[0]
 
-from sklearn.feature_extraction.text import CountVectorizer
-
-cv = CountVectorizer(max_features=1500)
-X = cv.fit_transform(corpus).toarray()
-y = dataset.iloc[:, 1].values
-
-
-from sklearn.preprocessing import Imputer
-y=y.reshape(-1,1)
-imputer = Imputer(missing_values = 'NaN', strategy = 'mean', axis = 0)
-imputer = imputer.fit(y)
-y = imputer.transform(y)
-
-
-# from sklearn.feature_extraction.text import TfidfTransformer
-# tf_transformer = TfidfTransformer(use_idf=False).fit(X)
-# X_train_tf = tf_transformer.transform(X)
-
-# Splitting the dataset into the Training set and Test set
-from sklearn.cross_validation import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
-
-from sklearn.metrics import confusion_matrix
-
-def Apply(classifier, name):
-    classifier.fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    cm = confusion_matrix(y_test, y_pred)
-    Accuracy = (cm[0, 0] + cm[1, 1]) / sum(sum(cm))
-    Precision = cm[1, 1] / (cm[0, 1] + cm[1, 1])
-    Recall = cm[0, 0] / (cm[0, 0] + cm[1, 0])
-    F1Score = 2 * Precision * Recall / (Precision + Recall)
-    print(name, Accuracy, Precision, Recall, F1Score, sep='\t')
-
-
-print('Name', 'Accuracy', 'Precision', 'Recall', 'F1 Score', sep='\t')
-
-from sklearn.linear_model import LogisticRegression
-
-Apply(LogisticRegression(random_state=0), 'Logc')
-
-from sklearn.neighbors import KNeighborsClassifier
-
-Apply(KNeighborsClassifier(), 'KNN')
-
-from sklearn.svm import SVC
-
-Apply(SVC(kernel='rbf', random_state=0), 'SVM')
-
-from sklearn.naive_bayes import GaussianNB
-
-Apply(GaussianNB(), 'Naive')
-
-from sklearn.tree import DecisionTreeClassifier
-
-Apply(DecisionTreeClassifier(criterion='entropy', random_state=0), 'DTree')
-
-from sklearn.ensemble import RandomForestClassifier
-
-Apply(RandomForestClassifier(n_estimators=300, criterion='entropy', random_state=0), 'RForest')
-
-import json
-with open('abc.txt','wt+') as f:
-    json.dump(f, X)
+def Feedback(eventID, feedback):
+    return  Analyse(feedback)
+    # event = db.events.find_one({"_id":ObjectId(eventID)})
+    # predict = Analyse(feedback)
+    # if predict:
+    #     event['review']['positive'] += 1
+    # else:
+    #     event['review']['negative'] += 1
+    # db.events.update_one({'_id': event["_id"]}, {"$set": event}, upsert=False)
