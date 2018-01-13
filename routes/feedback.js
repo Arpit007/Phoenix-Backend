@@ -3,33 +3,26 @@
  */
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongoose').Types.ObjectId;
 
-// const socket = require('../src/socket');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
 
 
-router.post('/feedback', function (req, res) {
+router.post('/create', function (req, res) {
     "use strict";
-    const userID = req.body.userID;
     const eventID = req.body.eventID;
-    const description = req.body.description;
-
-    return model.feedback.createFeedback(userID , eventID , description)
-        .then(()=>{
-        res.json(response(statusCode.Ok));
-        })
-        .catch((e) => res.json(response(e) ));
+    const desc = req.body.desc;
+    
+    return model.feedback.createFeedback(req.userID, eventID, desc)
+        .then(() => res.json(response(statusCode.Ok)))
+        .catch((e) => res.json(response(e)));
 });
 
-router.post('/id', function (req, res) {
+router.post('/user', function (req, res) {
     "use strict";
-    const userID = req.body.userID;
-    const eventID = req.body.eventID;
-    const description = req.body.description;
-
+    const userID = req.userID;
+    
     return model.feedback.getFeedbackByUser(userID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
@@ -42,7 +35,7 @@ router.post('/id', function (req, res) {
 router.post('/event', function (req, res) {
     "use strict";
     const eventID = req.body.eventID;
-    return model.feedback.getFeedbackByEvent(userID)
+    return model.feedback.getFeedbackByEvent(eventID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
             reply.body.feedback = feedback;
@@ -53,9 +46,8 @@ router.post('/event', function (req, res) {
 
 router.post('/userEvent', function (req, res) {
     "use strict";
-    const userID = req.body.userID;
     const eventID = req.body.eventID;
-    return model.feedback.getFeedbackByUserAndEvent(userID , eventID)
+    return model.feedback.getFeedbackByUserAndEvent(req.userID, eventID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
             reply.body.feedback = feedback;
@@ -63,7 +55,6 @@ router.post('/userEvent', function (req, res) {
         })
         .catch((e) => res.json(response(e)));
 });
-
 
 
 module.exports = router;

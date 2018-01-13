@@ -51,13 +51,13 @@ presenter.getPresenterByEventAndUser = (eventID, userID, throwOnNull) => {
             return presenter;
         });
 };
-presenter.createPresenter = (userID, eventID , sTime , eTime) => {
+presenter.createPresenter = (userID, eventID , sDate , eDate) => {
     return presenter
         .create({
             userID : userID,
             eventID : eventID,
-            sTime : sTime,
-            eTime : eTime
+            sDate : sDate,
+            eDate : eDate
         });
 };
 

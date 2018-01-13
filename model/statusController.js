@@ -20,7 +20,7 @@ status.getStatusByID = (id, throwOnNull = false) => {
 };
 
 status.createStatus = (eventID, userID) => {
-    return event
+    return status
         .create({
             eventID : eventID,
             userID : userID
@@ -29,23 +29,22 @@ status.createStatus = (eventID, userID) => {
 
 status.getStatusByEvent = (eventID) => {
     return status
-        .findBy({ event : eventID })
+        .find({ event : eventID })
+        .sort('createdAt')
         .catch((e) => {
             "use strict";
             console.log(e);
             return null;
         }).then((status) => {
             "use strict";
-            if (!status && throwOnNull)
-                throw statusCode.NotFound;
             return status;
         });
 };
 
 status.getStatusForUser = (userID) => {
     return status
-        .findBy({ userID : userID })
-        .populate("event")
+        .find({ userID : userID })
+        .sort('-createdAt')
         .catch((e) => {
             "use strict";
             console.log(e);
@@ -56,4 +55,4 @@ status.getStatusForUser = (userID) => {
         });
 };
 
-module.exports = event;
+module.exports = status;
