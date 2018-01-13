@@ -3,7 +3,7 @@
  */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const ObjectID = Schema.ObjectId;
 const scheduleSchema = new Schema({
     eventID : { type : ObjectID, ref : 'Event', required : true, index : true },
     presenters : [ { type : ObjectID, ref : 'Presenter' } ]
