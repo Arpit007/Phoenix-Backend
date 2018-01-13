@@ -6,8 +6,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const ObjectID = require('mongoose').Types.ObjectId;
 
-const socket = require('../src/socket');
-const resetPassMail = require('../src/passwordResetMail');
+// const socket = require('../src/socket');
+// const resetPassMail = require('../src/passwordResetMail');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');

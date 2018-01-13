@@ -10,7 +10,7 @@ const session = require('express-session');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
-const index = require('./routes/index');
+const api = require('./routes/api');
 
 const app = express();
 
@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', index);
+app.use('/api', api);
 app.use(function (req, res, next) {
     const err = new Error('Not Found ' + req.originalUrl);
     err.status = 404;

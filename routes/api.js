@@ -7,7 +7,8 @@ const router = express.Router();
 const auth = require('./auth');
 
 router.use('/user', require('./user'));
-router.use('/upload', require('./upload'));
+router.use('/event_by_id', require('./event'));
+
 
 
 module.exports = router;
