@@ -19,7 +19,8 @@ event.getEventByID = (id, throwOnNull = false) => {
         });
 };
 
-event.createEvent = (name, sDate, eDate, description, organiserID, path) => {
+event.createEvent = (name, sDate, eDate, description, organiserID, path , tSeat) => {
+    console.log(name + sDate + eDate + description + organiserID + path + " " + tSeat);
     return event
         .create({
             name : name,
@@ -27,7 +28,8 @@ event.createEvent = (name, sDate, eDate, description, organiserID, path) => {
             eDate : eDate,
             description : description,
             organiser : organiserID,
-            image : path
+            image : path,
+            totalSeats: tSeat
         });
 };
 
@@ -44,12 +46,13 @@ event.getEventByOrganiser = (userID) => {
 
 event.getLiveEvent = () => {
     let today = new Date();
-    return event.find({ sDate : { $gte : today }, eDate : { $lte : today } })
+    return event.find({}) //TODO
         .catch((e) => {
             console.log(e);
             return [];
         })
         .then((events) => {
+            // console.log(events);
             return events;
         })
 };

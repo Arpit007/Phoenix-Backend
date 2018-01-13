@@ -12,17 +12,18 @@ const model = require('../model/model');
 
 const upload = multer({ dest : xConfig.uploads.dir });
 
-router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
+    router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
     "use strict";
     const name = req.body.name;
     const sDate = req.body.sDate;
     const eDate = req.body.eDate;
     const description = req.body.desc;
+    const tSeat = req.body.tSeat;
     let path = '';
     if (req.body.file)
         path = req.body.file.path;
     
-    return model.event.createEvent(name, sDate, eDate, description, req.userID, path)
+    return model.event.createEvent(name, sDate, eDate, description, req.userID, path , tSeat)
         .then((event) => {
             let reply = response(statusCode.Ok);
             reply.body.eventID = event._id.toString();
@@ -82,6 +83,7 @@ router.post('/live', function (req, res) {
         .then((events) => {
             let reply = response(statusCode.Ok);
             reply.events = events;
+            // console.log(events);
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));

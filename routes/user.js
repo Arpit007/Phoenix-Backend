@@ -55,10 +55,7 @@ router.post('/signin', function (req, res) {
             
             res.json(reply);
         })
-        .catch((e) => {
-            console.log(e);
-            res.json(response(statusCode.InternalError));
-        });
+        .catch((e) => res.json(response(e)));
 });
 
 router.post('/pic', upload.single('pic'), auth.apiAuth, function (req, res) {
