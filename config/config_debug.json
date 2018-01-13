@@ -1,0 +1,34 @@
+{
+  "appName": "Phoenix: Debug",
+  "port": 3000,
+  "dbConfig": {
+    "url": "mongodb://localhost:27017/Phoenix"
+  },
+  "root": {
+    "userName": "StarkX",
+    "password": "hello1world!",
+    "email": "arpit2011@live.com"
+  },
+  "crypto": {
+    "TokenKey": "TokenKey.pem",
+    "TokenSaltLength": 16,
+    "MinPasswordIterations": 4,
+    "MaxPasswordIterations": 20,
+    "SessionKey": "SessionKey.txt",
+    "ResetTokenExpiry": 6,
+    "ResetTokenLength": 32,
+    "JwtExpiration": 12,
+    "MinPasswordLength": 8,
+    "MaxPasswordLength": 32
+  },
+  "mail": {
+    "service": "gmail",
+    "email": "arpitbhatnagar10@gmail.com",
+    "password": "amazingworld!"
+  },
+  "uploads": {
+    "dir": "uploads/",
+    "dbName": "collection.json",
+    "simultaneousFileLimit": 10
+  }
+}
