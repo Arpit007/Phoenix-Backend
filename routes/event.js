@@ -13,7 +13,7 @@ const model = require('../model/model');
 
 const upload = multer({ dest : xConfig.uploads.dir });
 
-    router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
+router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
     "use strict";
     const name = req.body.name;
     const sDate = req.body.sDate;
@@ -24,7 +24,7 @@ const upload = multer({ dest : xConfig.uploads.dir });
     if (req.body.file)
         path = req.body.file.path;
     
-    return model.event.createEvent(name, sDate, eDate, description, req.userID, path , tSeat)
+    return model.event.createEvent(name, sDate, eDate, description, req.userID, path, tSeat)
         .then((event) => {
             let reply = response(statusCode.Ok);
             reply.body.eventID = event._id.toString();
@@ -93,10 +93,10 @@ router.post('/live', function (req, res) {
 
 router.post('/csv', function (req, res) {
     let options = {
-        method: 'POST',
-        uri: 'http://localhost:5000/getCSV',
-        form: {
-            eventID: req.body.eventID
+        method : 'POST',
+        uri : 'http://localhost:5000/getCSV',
+        form : {
+            eventID : req.body.eventID
         }
     };
     
@@ -107,6 +107,36 @@ router.post('/csv', function (req, res) {
             res.json(reply);
         })
         .catch(function (err) {
+            res.json(response(statusCode.InternalError));
+        });
+});
+
+router.post('/interest', function (req, res) {
+    let eventID = req.body.eventID;
+    return model.status.createStatus(eventID, req.userID)
+        .then((status) => {
+            status.interested = true;
+            return status.save()
+                .then(() => {
+                    res.json(response(statusCode.Ok));
+                });
+        }).catch((e) => {
+            console.log(e);
+            res.json(response(statusCode.InternalError));
+        });
+});
+
+router.post('/going', function (req, res) {
+    let eventID = req.body.eventID;
+    return model.status.createStatus(eventID, req.userID)
+        .then((status) => {
+            status.going = true;
+            return status.save()
+                .then(() => {
+                    res.json(response(statusCode.Ok));
+                });
+        }).catch((e) => {
+            console.log(e);
             res.json(response(statusCode.InternalError));
         });
 });
