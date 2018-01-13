@@ -10,8 +10,8 @@ feedback.getFeedbackByUser = (userID) => {
             "use strict";
             console.log(e);
             return [];
-        }).then((events) => {
-            return events;
+        }).then((feedbacks) => {
+            return feedbacks;
         })
 };
 
@@ -21,8 +21,8 @@ feedback.getFeedbackByEvent = (eventID) => {
             "use strict";
             console.log(e);
             return [];
-        }).then((events) => {
-            return events;
+        }).then((feedbacks) => {
+            return feedbacks;
         })
 };
 feedback.getFeedbackByUserAndEvent = (userID, eventID) => {
@@ -31,8 +31,8 @@ feedback.getFeedbackByUserAndEvent = (userID, eventID) => {
             "use strict";
             console.log(e);
             return [];
-        }).then((events) => {
-            return events;
+        }).then((feedbacks) => {
+            return feedbacks;
         })
 };
 

@@ -52,6 +52,7 @@ presenter.getPresenterByEventAndUser = (eventID, userID, throwOnNull) => {
         });
 };
 presenter.createPresenter = (userID, eventID , sTime , eTime , description) => {
+
     return presenter
         .create({
             userID : userID,
