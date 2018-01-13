@@ -13,15 +13,13 @@ router.post('/', function (req, res) {
     "use strict";
     const otp = req.body.otp;
     const mobile = req.body.mobile;
-
     sendOtp.send(mobile, "PHOENX" , otp, function (error, data, response) {
-        if(response.type == "success") {
+        if(response.type === "success") {
           return res.json(response(statusCode.Ok));
         }else {
           return res.json(response(statusCode.NotFound));
         }
     });
-
 });
 
 
