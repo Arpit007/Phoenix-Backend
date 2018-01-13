@@ -19,18 +19,31 @@ event.getEventByID = (id, throwOnNull = false) => {
         });
 };
 
-event.createEvent = (name, sDate, eDate, description) => {
+event.createEvent = (name, sDate, eDate, description, organiserID) => {
     return event
         .create({
             name : name,
             sDate : sDate,
             eDate : eDate,
-            description : description
+            description : description,
+            organiser : organiserID
         });
 };
 
 event.getEventByOrganiser = (userID) => {
     return event.find({ organiser : userID })
+        .catch((e) => {
+            console.log(e);
+            return [];
+        })
+        .then((events) => {
+            return events;
+        })
+};
+
+event.getLiveEvent = () => {
+    let today = new Date();
+    return event.find({ sDate : { $gte : today }, eDate : { $lte : today } })
         .catch((e) => {
             console.log(e);
             return [];

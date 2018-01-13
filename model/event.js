@@ -18,7 +18,7 @@ const eventSchema = new Schema({
     url : String,
     organiser : { type : ObjectID, ref : 'User', required : true, index : true },
     tags : [ { type : String } ],
-    presenter : [ { type : ObjectID, ref : 'Presenter', required : true } ],
+    presenter : [ { type : ObjectID, ref : 'Presenter' } ],
     availSeats : { type : Number, default : 0 },
     totalSeats : { type : Number, default : 0 },
     interested : { type : Number, default : 0 },

@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const ObjectID = Schema.ObjectId;
 
 const statusSchema = new Schema({
-    eventID : { type : ObjectID, ref : 'Event', required : true },
+    event : { type : ObjectID, ref : 'Event', required : true },
     userID : { type : ObjectID, ref : 'User', required : true },
     interested : { type : Boolean, default : false },
     going : { type : Boolean, default : false },
