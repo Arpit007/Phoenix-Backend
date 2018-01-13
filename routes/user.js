@@ -19,11 +19,12 @@ const generateToken = (user) => {
 
 router.post('/signup', function (req, res) {
     "use strict";
-    const userName = req.body.userName;
+    const name = req.body.name;
+    const mobile = req.body.mobile;
     const email = req.body.email;
     const password = req.body.password;
     
-    return model.user.createUser(userName, email, password)
+    return model.user.createUser(name , mobile, email, password)
         .then((user) => {
             let reply = response(statusCode.Ok);
             reply.body.token = generateToken(user);
@@ -58,7 +59,7 @@ router.post('/signin', function (req, res) {
     const id = req.body.id;
     const password = req.body.password;
     
-    return model.user.authorise(id, password)
+    return model.user.authorise(email, password)
         .then((user) => {
             let reply = response(statusCode.Ok);
             reply.body.token = generateToken(user);
@@ -72,67 +73,67 @@ router.post('/signin', function (req, res) {
             res.json(response(statusCode.InternalError));
         });
 });
-
-/*Todo: Set Domain Name Here*/
-router.post('/forgot', function (req, res) {
-    const id = req.body.id;
-    return model.user.generateResetToken(id)
-        .then((user) => {
-            "use strict";
-            const link = 'http://' + xConfig.localIP + '/api/user/reset?token=' + user.resetToken;
-            return resetPassMail(user.email, user.userName, link)
-                .then((err) => {
-                    if (err)throw statusCode.InternalError;
-                    res.json(response(statusCode.Ok));
-                });
-        })
-        .catch((e) => res.json(response(e)));
-});
-
-router.get('/reset', function (req, res) {
-    const token = req.query.token;
-    try {
-        let payload = jwt.verify(token, xConfig.crypto.TokenKey);
-        const userID = ObjectID(payload.userID);
-        const token = payload.token;
-        return model.user.getUserByID(userID, true)
-            .then((user) => {
-                "use strict";
-                let validity = model.user.resetTokenValidity(user, token);
-                if (!validity) throw statusCode.Unauthorized;
-                res.json(response(statusCode.Ok));
-            })
-            .catch((e) => res.json(response(e)));
-    }
-    catch (e) {
-        res.json(response(statusCode.Unauthorized));
-    }
-});
-
-router.post('/change', function (req, res) {
-    "use strict";
-    const token = req.query.token;
-    try {
-        let payload = jwt.verify(token, xConfig.crypto.TokenKey);
-        const userID = ObjectID(payload.userID);
-        const token = payload.token;
-        return model.user.getUserByID(userID, true)
-            .then((user) => {
-                "use strict";
-                let validity = model.user.resetTokenValidity(user, token);
-                if (!validity) throw statusCode.Unauthorized;
-                return model.user.changePassword(User, password)
-                    .then(() => res.json(response(statusCode.Ok)))
-                    .catch((e) => {
-                        console.log(e);
-                        throw statusCode.InternalError;
-                    });
-            })
-            .catch((e) => res.json(response(e)));
-    }
-    catch (e) {
-        res.json(response(statusCode.Unauthorized));
-    }
-});
+//
+// /*Todo: Set Domain Name Here*/
+// router.post('/forgot', function (req, res) {
+//     const id = req.body.id;
+//     return model.user.generateResetToken(id)
+//         .then((user) => {
+//             "use strict";
+//             const link = 'http://' + xConfig.localIP + '/api/user/reset?token=' + user.resetToken;
+//             return resetPassMail(user.email, user.userName, link)
+//                 .then((err) => {
+//                     if (err)throw statusCode.InternalError;
+//                     res.json(response(statusCode.Ok));
+//                 });
+//         })
+//         .catch((e) => res.json(response(e)));
+// });
+//
+// router.get('/reset', function (req, res) {
+//     const token = req.query.token;
+//     try {
+//         let payload = jwt.verify(token, xConfig.crypto.TokenKey);
+//         const userID = ObjectID(payload.userID);
+//         const token = payload.token;
+//         return model.user.getUserByID(userID, true)
+//             .then((user) => {
+//                 "use strict";
+//                 let validity = model.user.resetTokenValidity(user, token);
+//                 if (!validity) throw statusCode.Unauthorized;
+//                 res.json(response(statusCode.Ok));
+//             })
+//             .catch((e) => res.json(response(e)));
+//     }
+//     catch (e) {
+//         res.json(response(statusCode.Unauthorized));
+//     }
+// });
+//
+// router.post('/change', function (req, res) {
+//     "use strict";
+//     const token = req.query.token;
+//     try {
+//         let payload = jwt.verify(token, xConfig.crypto.TokenKey);
+//         const userID = ObjectID(payload.userID);
+//         const token = payload.token;
+//         return model.user.getUserByID(userID, true)
+//             .then((user) => {
+//                 "use strict";
+//                 let validity = model.user.resetTokenValidity(user, token);
+//                 if (!validity) throw statusCode.Unauthorized;
+//                 return model.user.changePassword(User, password)
+//                     .then(() => res.json(response(statusCode.Ok)))
+//                     .catch((e) => {
+//                         console.log(e);
+//                         throw statusCode.InternalError;
+//                     });
+//             })
+//             .catch((e) => res.json(response(e)));
+//     }
+//     catch (e) {
+//         res.json(response(statusCode.Unauthorized));
+//     }
+// });
 
 module.exports = router;
