@@ -10,7 +10,7 @@ const auth = require('./auth');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
-
+const ObjectID = require('mongoose').Types.ObjectId;
 const upload = multer({ dest : xConfig.uploads.dir });
 
 router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
@@ -112,7 +112,7 @@ router.post('/csv', function (req, res) {
 });
 
 router.post('/interest', function (req, res) {
-    let eventID = req.body.eventID;
+    let eventID = ObjectID(req.body.eventID);
     return model.status.createStatus(eventID, req.userID)
         .then((status) => {
             status.interested = true;
@@ -127,7 +127,7 @@ router.post('/interest', function (req, res) {
 });
 
 router.post('/going', function (req, res) {
-    let eventID = req.body.eventID;
+    let eventID = ObjectID(req.body.eventID);
     return model.status.createStatus(eventID, req.userID)
         .then((status) => {
             status.going = true;
