@@ -4,6 +4,7 @@
 module.exports = {
     user : require('./userController'),
     event : require('./eventController'),
-    feedback : require('./feedback'),
-    schedule : require('./schedule')
+    feedback : require('./feedbackController'),
+    schedule : require('./scheduleController'),
+    presenter : require('./presenterController')
 };

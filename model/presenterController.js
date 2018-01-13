@@ -51,7 +51,6 @@ presenter.getPresenterByEventAndUser = (eventID, userID, throwOnNull) => {
             return presenter;
         });
 };
-
 feedback.createFeedback = (userID, eventID) => {
     return feedback
         .create({
