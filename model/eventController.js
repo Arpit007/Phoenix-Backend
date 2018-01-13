@@ -19,14 +19,15 @@ event.getEventByID = (id, throwOnNull = false) => {
         });
 };
 
-event.createEvent = (name, sDate, eDate, description, organiserID) => {
+event.createEvent = (name, sDate, eDate, description, organiserID, path) => {
     return event
         .create({
             name : name,
             sDate : sDate,
             eDate : eDate,
             description : description,
-            organiser : organiserID
+            organiser : organiserID,
+            image : path
         });
 };
 

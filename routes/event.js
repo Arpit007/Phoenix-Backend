@@ -3,21 +3,26 @@
  */
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongoose').Types.ObjectId;
+const multer = require('multer');
 
+const auth = require('./auth');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
 
+const upload = multer({ dest : xConfig.uploads.dir });
 
-router.post('/create', function (req, res) {
+router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
     "use strict";
     const name = req.body.name;
     const sDate = req.body.sDate;
     const eDate = req.body.eDate;
     const description = req.body.desc;
+    let path = '';
+    if (req.body.file)
+        path = req.body.file.path;
     
-    return model.event.createEvent(name, sDate, eDate, description, req.userID)
+    return model.event.createEvent(name, sDate, eDate, description, req.userID, path)
         .then((event) => {
             let reply = response(statusCode.Ok);
             reply.body.eventID = event._id.toString();
@@ -26,6 +31,7 @@ router.post('/create', function (req, res) {
         .catch((e) => res.json(response(e)));
 });
 
+router.use(auth.apiAuth);
 
 router.post('/event', function (req, res) {
     "use strict";

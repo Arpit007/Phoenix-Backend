@@ -4,12 +4,14 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const ObjectID = require('mongoose').Types.ObjectId;
+const multer = require('multer');
 
-// const socket = require('../src/socket');
+const auth = require('./auth');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
+
+const upload = multer({ dest : xConfig.uploads.dir });
 
 const generateToken = (user) => {
     "use strict";
@@ -23,7 +25,7 @@ router.post('/signup', function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
     
-    return model.user.createUser(name , mobile, email, password)
+    return model.user.createUser(name, mobile, email, password)
         .then((user) => {
             let reply = response(statusCode.Ok);
             reply.body.token = generateToken(user);
@@ -31,7 +33,7 @@ router.post('/signup', function (req, res) {
             reply.body.name = user.name;
             reply.body.picLink = user.picLink;
             reply.body.email = user.email;
-    
+            
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
@@ -50,13 +52,25 @@ router.post('/signin', function (req, res) {
             reply.body.name = user.name;
             reply.body.picLink = user.picLink;
             reply.body.email = user.email;
-    
+            
             res.json(reply);
         })
         .catch((e) => {
             console.log(e);
             res.json(response(statusCode.InternalError));
         });
+});
+
+router.post('/pic', upload.single('pic'), auth.apiAuth, function (req, res) {
+    return model.user.getUserByID(req.userID, true)
+        .then((user) => {
+            user.picLink = req.file.path;
+            return user.save()
+                .then(() => {
+                    res.json(response(statusCode.Ok));
+                });
+        })
+        .catch((e) => res.json(response(e)));
 });
 
 module.exports = router;
