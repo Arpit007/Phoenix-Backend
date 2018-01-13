@@ -9,17 +9,20 @@ const ObjectID = require('mongoose').Types.ObjectId;
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
-//
-// router.post('/schedule', function (req, res) {
-//     "use strict";
-//
-//     const eventID = req.body.eventID;
-//     return model.schedule.createSchedule( eventID)
-//         .then(()=>{
-//             res.json(response(statusCode.Ok));
-//         })
-//         .catch((e) => res.json(response(e) ));
-// });
+
+router.post('/presenter', function (req, res) {
+    "use strict";
+
+    const eventID = req.body.eventID;
+    const userID = req.body.userID;
+    const sTime = req.body.sTime;
+    const eTime = req.body.eTime;
+    return model.schedule.createPresenter(eventID , userID , sTime , eTime)
+        .then(()=>{
+            res.json(response(statusCode.Ok));
+        })
+        .catch((e) => res.json(response(e) ));
+});
 router.post('/id', function (req, res) {
     "use strict";
     const pID = req.body.pID;
