@@ -32,7 +32,7 @@ user.createUser = (name, mobile, email, password) => {
                 throw statusCode.PasswordLong;
         }).then(() => {
             return user
-                .find({ email : email })
+                .find({ $or : [ { email : email }, { mobile : mobile } ] })
                 .then((users) => {
                     "use strict";
                     if (users && users.length > 0)
