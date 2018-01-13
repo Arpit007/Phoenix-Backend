@@ -12,5 +12,4 @@ router.use('/status', auth.apiAuth, require('./status'));
 router.use('/feedback', auth.apiAuth, require('./feedback'));
 
 
-
 module.exports = router;

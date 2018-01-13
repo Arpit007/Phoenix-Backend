@@ -1,6 +1,5 @@
-from config import xConfig, db
+from config import db
 from bson.objectid import ObjectId
-from pprint import pprint
 import pandas as pd
 
 
@@ -13,7 +12,8 @@ def fetchData(eventID):
             dataset.append(item)
     dataset = pd.DataFrame(dataset)
     event = db.events.find_one({"_id":ObjectId(eventID)},{"name":1})
-    return [dataset, event['name']]
+    name = event['name'] if event else ""
+    return [dataset, name]
 
 
 def writeCSV(eventID):
@@ -21,7 +21,7 @@ def writeCSV(eventID):
         result = fetchData(eventID)
         dataset = result[0]
         name = result[1] if result[1] else eventID
-        dataset.to_csv('../static/' + name + '.csv', sep=',')
+        dataset.to_csv('../public/static/' + name + '.csv', sep=',')
 
         return "/static/" + eventID + '.csv'
     except Exception as e:

@@ -10,8 +10,6 @@ else: debugMode = True
 with open('../config/config_debug.json') as file:
     xConfig = json.load(file)
 
-print(xConfig['port'])
-
 client = MongoClient(xConfig['dbConfig']['url'])
 db = client[xConfig['dbConfig']['db']]
 

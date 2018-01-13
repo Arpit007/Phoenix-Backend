@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
+const request = require('request-promise');
 const auth = require('./auth');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
@@ -85,6 +86,27 @@ router.post('/live', function (req, res) {
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
+});
+
+
+router.post('/csv', function (req, res) {
+    let options = {
+        method: 'POST',
+        uri: 'http://localhost:5000/getCSV',
+        form: {
+            eventID: req.body.eventID
+        }
+    };
+    
+    request(options)
+        .then(function (parsedBody) {
+            let reply = response(statusCode.Ok);
+            reply.body.link = parsedBody;
+            res.json(reply);
+        })
+        .catch(function (err) {
+            res.json(response(statusCode.InternalError));
+        });
 });
 
 module.exports = router;

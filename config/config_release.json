@@ -5,6 +5,7 @@
     "url": "mongodb://localhost:27017",
     "db": "PhoenixLive"
   },
+  "pyPort":3001,
   "root": {
     "userName": "StarkX",
     "password": "hello1world!",

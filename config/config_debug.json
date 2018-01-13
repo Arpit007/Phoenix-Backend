@@ -1,10 +1,11 @@
 {
   "appName": "Phoenix: Debug",
-  "port": 3100,
+  "port": 3000,
   "dbConfig": {
     "url": "mongodb://localhost:27017",
     "db": "Phoenix"
   },
+  "pyPort":3001,
   "root": {
     "userName": "StarkX",
     "password": "hello1world!",
