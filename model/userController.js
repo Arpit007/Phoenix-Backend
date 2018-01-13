@@ -1,10 +1,8 @@
 /**
- * Created by sonu on 13-Jan-18.
+ * Created by StarkX on 13-Jan-18.
  */
 const user = require('./user');
 const bCrypt = require('bcrypt');
-const rand = require('random-key');
-const jwt = require('jsonwebtoken');
 
 const statusCode = require('./statusCode');
 
@@ -24,7 +22,7 @@ const comparePassword = (realPassword, password) => {
     });
 };
 
-user.createUser = (userName, email, password) => {
+user.createUser = (name, mobile, email, password) => {
     return new Promise((resolve, reject) => resolve())
         .then(() => {
             "use strict";
@@ -34,7 +32,7 @@ user.createUser = (userName, email, password) => {
                 throw statusCode.PasswordLong;
         }).then(() => {
             return user
-                .findOne({ $or : [ { userName : userName }, { email : email } ] })
+                .find({ email : email })
                 .then((users) => {
                     "use strict";
                     if (users && users.length > 0)
@@ -44,7 +42,8 @@ user.createUser = (userName, email, password) => {
                         .then((hash) => {
                             return user
                                 .create({
-                                    userName : userName,
+                                    name : name,
+                                    mobile : mobile,
                                     email : email,
                                     password : hash
                                 });
@@ -58,50 +57,39 @@ user.createUser = (userName, email, password) => {
         });
 };
 
-user.getUser = (identifier, throwOnNull = false) => {
+user.getUser = (email, throwOnNull = false) => {
     return user
-        .findOne({ $or : [ { userName : identifier }, { email : identifier } ] })
-        .then((user) => {
-            "use strict";
-            if (!user && throwOnNull)
-                throw statusCode.UserDoesNotExists;
-            return user;
-        })
+        .findOne({ email : email })
         .catch((e) => {
             "use strict";
             console.log(e);
             return null;
+        }).then((user) => {
+            "use strict";
+            if (!user && throwOnNull)
+                throw statusCode.UserDoesNotExists;
+            return user;
         });
 };
 
 user.getUserByID = (id, throwOnNull = false) => {
     return user
         .findById(id)
-        .then((user) => {
+        .catch((e) => {
+            "use strict";
+            console.log(e);
+            return null;
+        }).then((user) => {
             "use strict";
             if (!user && throwOnNull)
                 throw statusCode.UserDoesNotExists;
             return user;
         })
-        .catch((e) => {
-            "use strict";
-            console.log(e);
-            return null;
-        });
 };
 
-user.getUsers = (userIDs) => {
-    return user.find({ _id : userIDs }, { _id : 1 })
-        .catch((e) => {
-            "use strict";
-            console.log(e);
-            return [];
-        });
-};
-
-user.authorise = (identifier, password) => {
+user.authorise = (email, password) => {
     "use strict";
-    return user.getUser(identifier, true)
+    return user.getUser(email, true)
         .then((user) => {
             return comparePassword(password, user.password)
                 .then((validity) => {
@@ -110,45 +98,6 @@ user.authorise = (identifier, password) => {
                     return user;
                 });
         })
-};
-
-user.generateResetToken = (identifier) => {
-    "use strict";
-    return user.getUser(identifier, true)
-        .then((User) => {
-            User.resetToken = jwt.sign({
-                userID : User._id.toString(),
-                key : rand.generate(xConfig.crypto.ResetTokenLength)
-            }, xConfig.crypto.TokenKey, { expiresIn : xConfig.crypto.JwtExpiration * 60 * 60 });
-            return User.save()
-                .then(() => User)
-                .catch((e) => {
-                    console.log(e);
-                    throw statusCode.InternalError;
-                })
-        });
-};
-
-user.resetTokenValidity = (User, Token) => {
-    "use strict";
-    return (User.reset.Token === Token);
-};
-
-user.changePassword = (User, newPassword) => {
-    "use strict";
-    return bCrypt.genSalt(hashCount())
-        .then((salt) => bCrypt.hash(newPassword, salt))
-        .then((hash) => {
-            User.password = hash;
-            User.reset.Token = null;
-            User.reset.Expiry = null;
-            return User.save()
-                .then(() => User)
-                .catch((e) => {
-                    console.log(e);
-                    throw statusCode.InternalError;
-                });
-        });
 };
 
 module.exports = user;
