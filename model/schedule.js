@@ -9,4 +9,4 @@ const scheduleSchema = new Schema({
     presenters : [ { type : ObjectID, ref : 'Presenter' } ]
 });
 
-module.exports = mongoose.model('Presenter', scheduleSchema);
+module.exports = mongoose.model('Schedule', scheduleSchema);

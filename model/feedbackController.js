@@ -15,7 +15,7 @@ feedback.getFeedbackByUser = (userID) => {
         })
 };
 
-event.getFeedbackByEvent = (eventID) => {
+feedback.getFeedbackByEvent = (eventID) => {
     return feedback.find({ eventID : eventID })
         .catch((e) => {
             "use strict";

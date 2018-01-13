@@ -52,7 +52,7 @@ presenter.getPresenterByEventAndUser = (eventID, userID, throwOnNull) => {
         });
 };
 presenter.createPresenter = (userID, eventID , sTime , eTime) => {
-    return feedback
+    return presenter
         .create({
             userID : userID,
             eventID : eventID,
@@ -61,4 +61,4 @@ presenter.createPresenter = (userID, eventID , sTime , eTime) => {
         });
 };
 
-module.exports = feedback;
+module.exports = presenter;

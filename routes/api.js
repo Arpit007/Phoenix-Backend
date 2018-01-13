@@ -7,8 +7,8 @@ const router = express.Router();
 const auth = require('./auth');
 
 router.use('/user', require('./user'));
-router.use('/event', auth, require('./event'));
-router.use('/feedback', auth, require('./feedback'));
+router.use('/event', auth.apiAuth, require('./event'));
+router.use('/feedback', auth.apiAuth, require('./feedback'));
 
 
 

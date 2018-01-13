@@ -37,4 +37,4 @@ schedule.createSchedule = (eventID) => {
         });
 };
 
-module.exports = event;
+module.exports = schedule;
