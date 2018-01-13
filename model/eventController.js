@@ -16,7 +16,7 @@ event.getEventByID = (id, throwOnNull = false) => {
             if (!event && throwOnNull)
                 throw statusCode.NotFound;
             return event;
-        })
+        });
 };
 
 event.createEvent = (name, sDate, eDate, description) => {

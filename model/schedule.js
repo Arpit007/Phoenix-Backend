@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const scheduleSchema = new Schema({
-    eventID : { type : ObjectID, ref : 'Event', required : true, index:true },
-    presenters:[{ type : ObjectID, ref : 'Presenter', required : true }]
+    eventID : { type : ObjectID, ref : 'Event', required : true, index : true },
+    presenters : [ { type : ObjectID, ref : 'Presenter' } ]
 });
 
 module.exports = mongoose.model('Presenter', scheduleSchema);
