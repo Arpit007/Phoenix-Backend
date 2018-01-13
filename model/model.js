@@ -5,5 +5,6 @@ module.exports = {
     user : require('./userController'),
     event : require('./eventController'),
     feedback : require('./feedback'),
-    schedule : require('./schedule')
+    schedule : require('./schedule'),
+    status : require('./status')
 };
