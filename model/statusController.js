@@ -56,4 +56,4 @@ status.getStatusForUser = (userID) => {
         });
 };
 
-module.exports = event;
+module.exports = status;
