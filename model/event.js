@@ -23,7 +23,11 @@ const eventSchema = new Schema({
     totalSeats : { type : Number, default : 0 },
     interested : { type : Number, default : 0 },
     waitList : { type : Number, default : 0 },
-    going : { type : Number, default : 0 }
+    going : { type : Number, default : 0 },
+    review : {
+        positive : { type : Number, default : 0 },
+        negative : { type : Number, default : 0 }
+    }
 });
 
 module.exports = mongoose.model('Event', eventSchema);

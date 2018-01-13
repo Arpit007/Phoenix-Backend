@@ -103,7 +103,7 @@ router.post('/csv', function (req, res) {
     request(options)
         .then(function (parsedBody) {
             let reply = response(statusCode.Ok);
-            reply.body.link = parsedBody;
+            reply.body.link = parsedBody.path;
             res.json(reply);
         })
         .catch(function (err) {
@@ -118,7 +118,12 @@ router.post('/interest', function (req, res) {
             status.interested = true;
             return status.save()
                 .then(() => {
-                    res.json(response(statusCode.Ok));
+                    return model.event.getEventByID(eventID)
+                        .then((event) => {
+                            event.interested++;
+                            return event.save()
+                                .then(() => res.json(response(statusCode.Ok)));
+                        });
                 });
         }).catch((e) => {
             console.log(e);
@@ -128,17 +133,38 @@ router.post('/interest', function (req, res) {
 
 router.post('/going', function (req, res) {
     let eventID = ObjectID(req.body.eventID);
-    return model.status.createStatus(eventID, req.userID)
-        .then((status) => {
-            status.going = true;
-            return status.save()
-                .then(() => {
-                    res.json(response(statusCode.Ok));
-                });
-        }).catch((e) => {
+    return model.event.getEventByID(eventID)
+        .then((event) => {
+            if (event.availSeats) {
+                event.avalSeats--;
+                event.going++;
+                return event.save()
+                    .then(() => {
+                        return model.status.createStatus(eventID, req.userID)
+                            .then((status) => {
+                                status.going = true;
+                                return status.save()
+                                    .then(() => res.json(response(statusCode.Ok)));
+                            });
+                    });
+            }
+            else {
+                event.waiting++;
+                return event.save()
+                    .then(() => {
+                        return model.status.createStatus(eventID, req.userID)
+                            .then((status) => {
+                                status.waiting = true;
+                                return status.save()
+                                    .then(() => res.json(response(statusCode.Ok)));
+                            });
+                    });
+            }
+        })
+        .catch((e) => {
             console.log(e);
             res.json(response(statusCode.InternalError));
-        });
+        })
 });
 
 module.exports = router;
