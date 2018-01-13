@@ -14,10 +14,11 @@ router.post('/presenter', function (req, res) {
     "use strict";
 
     const eventID = req.body.eventID;
-    const userID = req.body.userID;
+    const userID = req.userID;
     const sTime = req.body.sTime;
     const eTime = req.body.eTime;
-    return model.schedule.createPresenter(eventID , userID , sTime , eTime)
+    const description = req.body.description;
+    return model.schedule.createPresenter(eventID , userID , sTime , eTime , description)
         .then(()=>{
             res.json(response(statusCode.Ok));
         })
