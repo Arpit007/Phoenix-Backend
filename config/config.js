@@ -22,7 +22,7 @@ config.crypto.SessionKey = fs.readFileSync(path.join(__dirname, config.crypto.Se
 config.crypto.MinPasswordIterations = Math.max(1, config.crypto.MinPasswordIterations);
 config.crypto.MaxPasswordIterations = Math.max(1, Math.min(99, config.crypto.MaxPasswordIterations));
 
-require('./dbConnect')(config.dbConfig.url);
+require('./dbConnect')(`${config.dbConfig.url}/${config.dbConfig.db}`);
 
 global.xConfig = config;
 module.exports = config;

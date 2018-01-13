@@ -22,7 +22,7 @@ status.getStatusByID = (id, throwOnNull = false) => {
 status.createStatus = (eventID, userID) => {
     return status
         .create({
-            eventID : eventID,
+            event : eventID,
             userID : userID
         });
 };

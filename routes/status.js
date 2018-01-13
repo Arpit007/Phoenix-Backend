@@ -3,9 +3,7 @@
  */
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongoose').Types.ObjectId;
 
-// const socket = require('../src/socket');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
@@ -14,7 +12,7 @@ router.post('/status', function (req, res) {
     "use strict";
 
     const eventID = req.body.eventID;
-    const userID = req.userID;
+    const userID = req.body.userID;
 
     return model.status.createStatus(eventID , userID)
         .then(()=>{

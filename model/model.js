@@ -8,5 +8,4 @@ module.exports = {
     feedback : require('./feedbackController'),
     schedule : require('./scheduleController'),
     presenter : require('./presenterController')
-    
 };
