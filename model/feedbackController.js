@@ -25,7 +25,6 @@ event.getFeedbackByEvent = (eventID) => {
             return events;
         })
 };
-
 feedback.getFeedbackByUserAndEvent = (userID, eventID) => {
     return feedback.find({ userID : userID, eventID : eventID })
         .catch((e) => {

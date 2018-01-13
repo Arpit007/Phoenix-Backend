@@ -17,11 +17,14 @@ router.post('/feedback', function (req, res) {
     const eventID = req.body.eventID;
     const description = req.body.description;
 
-    return model.feedback.storeFeedback(userID , eventID , description)
+    return model.feedback.createFeedback(userID , eventID , description)
+        .then(()=>{
+        res.json(response(statusCode.Ok));
+        })
         .catch((e) => res.json(response(e) ));
 });
 
-router.post('/getFeedbackByUserId', function (req, res) {
+router.post('/id', function (req, res) {
     "use strict";
     const userID = req.body.userID;
     const eventID = req.body.eventID;
@@ -30,38 +33,32 @@ router.post('/getFeedbackByUserId', function (req, res) {
     return model.feedback.getFeedbackByUser(userID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
-            reply.body.userID = feedback.userID.toString();
-            reply.body.eventID = feedback.eventID.toString();
-            reply.body.description = feedback.desc.toString();
+            reply.body.feedback = feedback;
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
 });
 
-router.post('/getFeedbackByEvent', function (req, res) {
+router.post('/event', function (req, res) {
     "use strict";
     const eventID = req.body.eventID;
     return model.feedback.getFeedbackByEvent(userID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
-            reply.body.userID = feedback.userID.toString();
-            reply.body.eventID = feedback.eventID.toString();
-            reply.body.description = feedback.desc.toString();
+            reply.body.feedback = feedback;
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
 });
 
-router.post('/getFeedbackByUserAndEvent', function (req, res) {
+router.post('/userEvent', function (req, res) {
     "use strict";
     const userID = req.body.userID;
     const eventID = req.body.eventID;
     return model.feedback.getFeedbackByUserAndEvent(userID , eventID)
         .then((feedback) => {
             let reply = response(statusCode.Ok);
-            reply.body.userID = feedback.userID.toString();
-            reply.body.eventID = feedback.eventID.toString();
-            reply.body.description = feedback.desc.toString();
+            reply.body.feedback = feedback;
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
