@@ -8,6 +8,7 @@ const auth = require('./auth');
 
 router.use('/user', require('./user'));
 router.use('/event', require('./event'));
+router.use('/sendotp', require('./sendotp'));
 router.use('/status', auth.apiAuth, require('./status'));
 router.use('/feedback', auth.apiAuth, require('./feedback'));
 

@@ -31,6 +31,7 @@ status.getStatusByEvent = (eventID) => {
     return status
         .find({ event : eventID })
         .sort('createdAt')
+        .populate("event")
         .catch((e) => {
             "use strict";
             console.log(e);

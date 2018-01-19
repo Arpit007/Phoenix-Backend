@@ -136,7 +136,7 @@ router.post('/going', function (req, res) {
     return model.event.getEventByID(eventID)
         .then((event) => {
             if (event.availSeats) {
-                event.avalSeats--;
+                event.availSeats--;
                 event.going++;
                 return event.save()
                     .then(() => {

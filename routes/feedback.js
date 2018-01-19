@@ -26,6 +26,9 @@ router.post('/create', function (req, res) {
             };
             
             return request(options)
+                .then((we)=>{
+                console.log(we);
+                })
                 .catch(function (err) {
                     console.log(err);
                 });
