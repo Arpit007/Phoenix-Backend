@@ -13,7 +13,7 @@ router.post('/create', function (req, res) {
     "use strict";
     const eventID = req.body.eventID;
     const desc = req.body.desc;
-    
+    console.log(eventID + " " + desc);
     return model.feedback.createFeedback(req.userID, eventID, desc)
         .then(() => {
             let options = {
