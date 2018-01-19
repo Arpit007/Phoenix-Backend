@@ -1,5 +1,4 @@
 from matplotlib import pyplot as plt
-from config import *
 
 
 def graph(positive, negative, name):
@@ -17,8 +16,7 @@ def graph(positive, negative, name):
     plt.close(fig)
 
 
-def generateGraph(eventID):
-    event = db.events.find_one({"_id": ObjectId(eventID)}, {"review": 1})
+def generateGraph(eventID, positive, negative):
     name = '../public/static/' + eventID + ".png"
-    graph(event["review"]["positive"], event["review"]["negative"], name)
+    graph(positive, negative, name)
     return '/static/' + eventID + ".png"

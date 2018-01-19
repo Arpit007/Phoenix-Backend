@@ -25,7 +25,7 @@ def setFeedback():
 def getGraph():
     data = dict(request.form)
     if 'eventID' in data:
-        data = generateGraph(data['eventID'][0])
+        data = generateGraph(data['eventID'][0], data['positive'][0], data['negative'][0])
         return jsonify({'path': data}), 200
     else:
         return jsonify({}), 403

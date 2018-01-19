@@ -104,15 +104,14 @@ router.post('/csv', function (req, res) {
     return model.status.find({ _id : req.body.eventID, going : true }, { userID : 1 })
         .populate({
             path : "userID",
-            select : "name picLink email mobile"
-
+            select : "name email mobile"
         })
         .then((result) => {
             let dataset = [];
             result.forEach((item) => {
                 dataset.push(item.userID);
             });
-            const data = { name : req.body.eventID, dataset: dataset };
+            const data = { name : req.body.eventID, dataset : dataset };
             
             let options = {
                 method : 'POST',
@@ -123,10 +122,11 @@ router.post('/csv', function (req, res) {
             };
             
             request(options)
-                .then(function (parsedBody) {
+                .then(function (parsedBody ,  x) {
                     let reply = response(statusCode.Ok);
                     reply.body.link = parsedBody.path;
-                    res.json(reply);
+                    console.log(parsedBody + x);
+                    res.json(parsedBody);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -152,6 +152,33 @@ router.post('/interest', function (req, res) {
         }).catch((e) => {
             console.log(e);
             res.json(response(statusCode.InternalError));
+        });
+});
+
+router.post('/graph', function (req, res) {
+    return model.event.getEventByID(ObjectID(req.body.eventID))
+        .then((event) => {
+            let options = {
+                method : 'POST',
+                uri : xConfig.pyServer + '/graph',
+                form : {
+                    eventID : event._id.toString(),
+                    positive : event.review.positive,
+                    negative : event.review.negative
+                }
+            };
+            
+            request(options)
+                .then(function (parsedBody) {
+                    let reply = response(statusCode.Ok);
+                    parsedBody=JSON.parse(parsedBody);
+                    reply.body.path = parsedBody.path;
+                    res.json(reply);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.json(response(statusCode.InternalError));
+                });
         });
 });
 

@@ -19,7 +19,7 @@ event.getEventByID = (id, throwOnNull = false) => {
         });
 };
 
-event.createEvent = (name, sDate, eDate, description, organiserID, path, tags , tSeat) => {
+event.createEvent = (name, sDate, eDate, description, organiserID, path , tSeat , tags) => {
     console.log(name + sDate + eDate + description + organiserID + path + "  "+tags+  " " + tSeat);
     return event
         .create({
