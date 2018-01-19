@@ -36,9 +36,6 @@ status.getStatusByEvent = (eventID) => {
             "use strict";
             console.log(e);
             return null;
-        }).then((status) => {
-            "use strict";
-            return status;
         });
 };
 
@@ -51,9 +48,21 @@ status.getStatusForUser = (userID) => {
             "use strict";
             console.log(e);
             return [];
-        }).then((status) => {
+        });
+};
+
+status.getGoing = (eventID) =>{
+    return status
+        .find({ event : eventID, going : true })
+        .sort('createdAt')
+        .populate({
+            path : "userID",
+            select : "name email"
+        })
+        .catch((e) => {
             "use strict";
-            return status;
+            console.log(e);
+            return [];
         });
 };
 

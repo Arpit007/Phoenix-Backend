@@ -11,7 +11,7 @@ else: debugMode = True
 with open('../config/config_debug.json') as file:
     xConfig = json.load(file)
 
-client = MongoClient("mongodb://192.168.31.169:27017")
+client = MongoClient(xConfig['dbConfig']['url'])
 db = client[xConfig['dbConfig']['db']]
 
 
