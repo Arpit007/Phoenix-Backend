@@ -15,6 +15,21 @@ router.post('/create', function (req, res) {
     const desc = req.body.desc;
     
     return model.feedback.createFeedback(req.userID, eventID, desc)
+        .then(() => {
+            let options = {
+                method : 'POST',
+                uri : 'http://192.168.31.220:5000/feedback',
+                form : {
+                    eventID : req.body.eventID,
+                    feedback : desc
+                }
+            };
+            
+            return request(options)
+                .catch(function (err) {
+                    console.log(err);
+                });
+        })
         .then(() => res.json(response(statusCode.Ok)))
         .catch((e) => res.json(response(e)));
 });

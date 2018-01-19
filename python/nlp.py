@@ -4,6 +4,7 @@ dataset = pd.read_csv('data1.tsv', delimiter='\t', quoting=3)
 
 import re
 import nltk
+from config import *
 from nltk.corpus import stopwords
 import pickle
 from nltk.stem.porter import PorterStemmer
@@ -42,6 +43,9 @@ from nltk.stem.porter import PorterStemmer
 #
 # print('Name', 'Accuracy', 'Precision', 'Recall', 'F1 Score', sep='\t')
 # print(Accuracy, Precision, Recall, F1Score, sep='\t')
+##Name	Accuracy	Precision	Recall	F1 Score
+##0.813333333333	0.875	0.767441860465	0.817699115044
+
 #
 # with open('classifier.pkl', 'wb') as fid:
 #     pickle.dump(classifier, fid)
@@ -65,11 +69,10 @@ def Analyse(text):
     return pred[0]
 
 def Feedback(eventID, feedback):
-    return  Analyse(feedback)
-    # event = db.events.find_one({"_id":ObjectId(eventID)})
-    # predict = Analyse(feedback)
-    # if predict:
-    #     event['review']['positive'] += 1
-    # else:
-    #     event['review']['negative'] += 1
-    # db.events.update_one({'_id': event["_id"]}, {"$set": event}, upsert=False)
+    event = db.events.find_one({"_id":ObjectId(eventID)})
+    predict = Analyse(feedback)
+    if predict:
+        event['review']['positive'] += 1
+    else:
+        event['review']['negative'] += 1
+    db.events.update_one({'_id': event["_id"]}, {"$set": event}, upsert=False)

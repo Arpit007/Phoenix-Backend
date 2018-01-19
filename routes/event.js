@@ -94,7 +94,7 @@ router.post('/live', function (req, res) {
 router.post('/csv', function (req, res) {
     let options = {
         method : 'POST',
-        uri : 'http://localhost:5000/getCSV',
+        uri : 'http://192.168.31.220:5000/getCSV',
         form : {
             eventID : req.body.eventID
         }
