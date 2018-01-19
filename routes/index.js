@@ -9,4 +9,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: xConfig.appName });
 });
 
+router.get('/my', function(req, res, next) {
+  res.render('index', { title: xConfig.appName });
+});
+
 module.exports = router;

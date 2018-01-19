@@ -99,25 +99,39 @@ router.post('/live', function (req, res) {
         .catch((e) => res.json(response(e)));
 });
 
-
 router.post('/csv', function (req, res) {
-    let options = {
-        method : 'POST',
-        uri : xConfig.pyServer + '/getCSV',
-        form : {
-            eventID : req.body.eventID
-        }
-    };
-    
-    request(options)
-        .then(function (parsedBody) {
-            let reply = response(statusCode.Ok);
-            reply.body.link = parsedBody.path;
-            res.json(reply);
+
+    return model.status.find({ _id : req.body.eventID, going : true }, { userID : 1 })
+        .populate({
+            path : "userID",
+            select : "name picLink email mobile"
+
         })
-        .catch(function (err) {
-            console.log(err);
-            res.json(response(statusCode.InternalError));
+        .then((result) => {
+            let dataset = [];
+            result.forEach((item) => {
+                dataset.push(item.userID);
+            });
+            const data = { name : req.body.eventID, dataset: dataset };
+            
+            let options = {
+                method : 'POST',
+                uri : xConfig.pyServer + '/getCSV',
+                form : {
+                    data : data
+                }
+            };
+            
+            request(options)
+                .then(function (parsedBody) {
+                    let reply = response(statusCode.Ok);
+                    reply.body.link = parsedBody.path;
+                    res.json(reply);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.json(response(statusCode.InternalError));
+                });
         });
 });
 
@@ -147,17 +161,17 @@ router.post('/going', function (req, res) {
         .then((event) => {
             console.log(event.availSeats);
             // if (event.availSeats !=  0) {
-                event.availSeats--;
-                event.going++;
-                return event.save()
-                    .then(() => {
-                        return model.status.createStatus(eventID, req.userID)
-                            .then((status) => {
-                                status.going = true;
-                                return status.save()
-                                    .then(() => res.json(response(statusCode.Ok)));
-                            });
-                    });
+            event.availSeats--;
+            event.going++;
+            return event.save()
+                .then(() => {
+                    return model.status.createStatus(eventID, req.userID)
+                        .then((status) => {
+                            status.going = true;
+                            return status.save()
+                                .then(() => res.json(response(statusCode.Ok)));
+                        });
+                });
             // }
             // else {
             //     event.waiting++;
