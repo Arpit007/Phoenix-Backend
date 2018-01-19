@@ -45,6 +45,7 @@ status.getStatusForUser = (userID) => {
     return status
         .find({ userID : userID })
         .sort('-createdAt')
+        .populate("event")
         .catch((e) => {
             "use strict";
             console.log(e);

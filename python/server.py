@@ -1,6 +1,6 @@
 from eventCSV import writeCSV
 from nlp import Feedback
-
+from event import generateGraph
 from flask import Flask, request, abort, jsonify
 
 app = Flask(__name__)
@@ -17,6 +17,13 @@ def setFeedback():
     data = dict(request.form)
     data = Feedback(data['eventID'][0], data['feedback'][0])
     return jsonify({"data":int(data)}), 200
+
+
+@app.route('/graph', methods=['POST'])
+def setFeedback():
+    data = dict(request.form)
+    data = generateGraph(data['eventID'][0])
+    return jsonify({'path': data}), 200
 
 
 if __name__ == '__main__':

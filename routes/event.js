@@ -84,7 +84,6 @@ router.post('/live', function (req, res) {
         .then((events) => {
             let reply = response(statusCode.Ok);
             reply.events = events;
-            // console.log(events);
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
@@ -107,6 +106,7 @@ router.post('/csv', function (req, res) {
             res.json(reply);
         })
         .catch(function (err) {
+            console.log(err);
             res.json(response(statusCode.InternalError));
         });
 });

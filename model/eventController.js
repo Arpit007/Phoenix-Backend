@@ -38,23 +38,16 @@ event.getEventByOrganiser = (userID) => {
         .catch((e) => {
             console.log(e);
             return [];
-        })
-        .then((events) => {
-            return events;
-        })
+        });
 };
 
 event.getLiveEvent = () => {
     let today = new Date();
-    return event.find({}) //TODO
+    return event.find({ sDate : { $lte : today }, eDate : { $gte : today } })
         .catch((e) => {
             console.log(e);
             return [];
-        })
-        .then((events) => {
-            // console.log(events);
-            return events;
-        })
+        });
 };
 
 module.exports = event;
