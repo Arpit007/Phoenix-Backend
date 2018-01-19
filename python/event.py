@@ -19,6 +19,6 @@ def graph(positive, negative, name):
 
 def generateGraph(eventID):
     event = db.events.find_one({"_id": ObjectId(eventID)}, {"review": 1})
-    name = '../public/static/' + event["_id"] + ".png"
+    name = '../public/static/' + eventID + ".png"
     graph(event["review"]["positive"], event["review"]["negative"], name)
-    return '/static/' + event["_id"] + ".png"
+    return '/static/' + eventID + ".png"

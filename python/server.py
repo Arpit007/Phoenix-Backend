@@ -2,9 +2,10 @@ from eventCSV import writeCSV
 from nlp import Feedback
 from event import generateGraph
 from flask import Flask, request, abort, jsonify
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/getCSV', methods=['POST'])
 def getCSV():
@@ -24,8 +25,11 @@ def setFeedback():
 @app.route('/graph', methods=['POST'])
 def getGraph():
     data = dict(request.form)
-    data = generateGraph(data['eventID'][0])
-    return jsonify({'path': data}), 200
+    if 'eventID' in data:
+        data = generateGraph(data['eventID'][0])
+        return jsonify({'path': data}), 200
+    else:
+        return jsonify({}), 403
 
 
 if __name__ == '__main__':
