@@ -135,7 +135,8 @@ router.post('/going', function (req, res) {
     let eventID = ObjectID(req.body.eventID);
     return model.event.getEventByID(eventID)
         .then((event) => {
-            if (event.availSeats) {
+            console.log(event.availSeats);
+            // if (event.availSeats !=  0) {
                 event.availSeats--;
                 event.going++;
                 return event.save()
@@ -147,19 +148,19 @@ router.post('/going', function (req, res) {
                                     .then(() => res.json(response(statusCode.Ok)));
                             });
                     });
-            }
-            else {
-                event.waiting++;
-                return event.save()
-                    .then(() => {
-                        return model.status.createStatus(eventID, req.userID)
-                            .then((status) => {
-                                status.waiting = true;
-                                return status.save()
-                                    .then(() => res.json(response(statusCode.Ok)));
-                            });
-                    });
-            }
+            // }
+            // else {
+            //     event.waiting++;
+            //     return event.save()
+            //         .then(() => {
+            //             return model.status.createStatus(eventID, req.userID)
+            //                 .then((status) => {
+            //                     status.waiting = true;
+            //                     return status.save()
+            //                         .then(() => res.json(response(statusCode.Ok)));
+            //                 });
+            //         });
+            // }
         })
         .catch((e) => {
             console.log(e);
