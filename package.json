@@ -25,6 +25,7 @@
     "mongoose": "^5.0.0-rc2",
     "morgan": "~1.9.0",
     "multer": "^1.3.0",
+    "node-schedule": "^1.3.0",
     "nodemailer": "^4.4.1",
     "pytalk": "^1.0.5",
     "random-key": "^0.3.2",

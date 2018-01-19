@@ -18,7 +18,7 @@ router.post('/create', function (req, res) {
         .then(() => {
             let options = {
                 method : 'POST',
-                uri : 'http://192.168.31.220:5000/feedback',
+                uri : xConfig.pyServer + "/feedback",
                 form : {
                     eventID : req.body.eventID,
                     feedback : desc

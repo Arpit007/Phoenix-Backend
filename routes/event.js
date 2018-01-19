@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
+const schedule = require('../src/schedule');
 const request = require('request-promise');
 const auth = require('./auth');
 const response = require('../model/response');
@@ -20,15 +21,24 @@ router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
     const eDate = req.body.eDate;
     const description = req.body.desc;
     const tSeat = req.body.tSeat;
+    const tags = req.body.tag;
     let path = '';
     if (req.body.file)
         path = req.body.file.path;
     
-    return model.event.createEvent(name, sDate, eDate, description, req.userID, path, tSeat)
+    return model.event.createEvent(name, sDate, eDate, description, req.userID, path, tSeat , tags)
         .then((event) => {
-            let reply = response(statusCode.Ok);
-            reply.body.eventID = event._id.toString();
-            res.json(reply);
+            let date = event.sDate;
+            date.setMinutes(0);
+            date.setHours(0);
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            return schedule(date, event._id)
+                .then(() => {
+                    let reply = response(statusCode.Ok);
+                    reply.body.eventID = event._id.toString();
+                    res.json(reply);
+                });
         })
         .catch((e) => res.json(response(e)));
 });
@@ -93,7 +103,7 @@ router.post('/live', function (req, res) {
 router.post('/csv', function (req, res) {
     let options = {
         method : 'POST',
-        uri : 'http://192.168.31.220:5000/getCSV',
+        uri : xConfig.pyServer + '/getCSV',
         form : {
             eventID : req.body.eventID
         }
