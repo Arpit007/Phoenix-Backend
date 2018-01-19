@@ -18,5 +18,5 @@ def graph(positive, negative, name):
 
 def generateGraph(eventID, positive, negative):
     name = '../public/static/' + eventID + ".png"
-    graph(positive, negative, name)
+    graph(int(positive), int(negative), name)
     return '/static/' + eventID + ".png"

@@ -3,6 +3,7 @@ from nlp import Feedback
 from event import generateGraph
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS, cross_origin
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +11,8 @@ CORS(app)
 @app.route('/getCSV', methods=['POST'])
 def getCSV():
     data = dict(request.form)
-    return jsonify({'path': writeCSV(data['data']['name'][0], data['data']['dataset'][0])}), 200
+    data = json.loads(data['data'][0])
+    return jsonify({'path': writeCSV(data['name'], data['dataset'])}), 200
 
 
 @app.route('/feedback', methods=['POST'])
@@ -32,4 +34,3 @@ def getGraph():
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0', debug=True)
-    
