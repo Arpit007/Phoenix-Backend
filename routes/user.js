@@ -28,13 +28,12 @@ router.post('/signup', function (req, res) {
     return model.user.createUser(name, mobile, email, password)
         .then((user) => {
             let reply = response(statusCode.Ok);
-            reply.body = {
-                token : generateToken(user),
-                userID : user._id.toString(),
-                name : user.name,
-                picLink : user.picLink,
-                email : user.email
-            };
+            reply.body.token = generateToken(user);
+            reply.body.userID = user._id.toString();
+            reply.body.name = user.name;
+            reply.body.picLink = user.picLink;
+            reply.body.email = user.email;
+    
             res.json(reply);
         })
         .catch((e) => res.json(response(e)));
