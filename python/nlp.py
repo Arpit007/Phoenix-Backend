@@ -73,10 +73,4 @@ def Analyse(text):
     return pred[0]
 
 def Feedback(eventID, feedback):
-    event = db.events.find_one({"_id":ObjectId(eventID)})
-    predict = Analyse(feedback)
-    if predict:
-        event['review']['positive'] += 1
-    else:
-        event['review']['negative'] += 1
-    db.events.update_one({'_id': event["_id"]}, {"$set": event}, upsert=False)
+    return Analyse(feedback)

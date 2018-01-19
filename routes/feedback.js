@@ -26,8 +26,15 @@ router.post('/create', function (req, res) {
             };
             
             return request(options)
-                .then((we)=>{
-                console.log(we);
+                .then((we) => {
+                    we = JSON.parse(we);
+                    return model.event.getEventByID(eventID)
+                        .then((event) => {
+                            if (we.data)
+                                event.review.positive += 1;
+                            else event.review.negative += 1;
+                            return event.save();
+                        });
                 })
                 .catch(function (err) {
                     console.log(err);
