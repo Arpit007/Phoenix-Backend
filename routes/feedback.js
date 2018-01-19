@@ -3,7 +3,7 @@
  */
 const express = require('express');
 const router = express.Router();
-
+const request = require('request-promise');
 const response = require('../model/response');
 const statusCode = require('../model/statusCode');
 const model = require('../model/model');
@@ -13,7 +13,6 @@ router.post('/create', function (req, res) {
     "use strict";
     const eventID = req.body.eventID;
     const desc = req.body.desc;
-    
     return model.feedback.createFeedback(req.userID, eventID, desc)
         .then(() => {
             let options = {
@@ -24,7 +23,6 @@ router.post('/create', function (req, res) {
                     feedback : desc
                 }
             };
-            
             return request(options)
                 .then((we) => {
                     we = JSON.parse(we);
@@ -41,7 +39,7 @@ router.post('/create', function (req, res) {
                 });
         })
         .then(() => res.json(response(statusCode.Ok)))
-        .catch((e) => res.json(response(e)));
+        .catch((e) => {console.log(e);res.json(response(e))});
 });
 
 router.post('/user', function (req, res) {

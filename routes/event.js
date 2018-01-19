@@ -21,11 +21,12 @@ router.post('/create', upload.single('pic'), auth.apiAuth, function (req, res) {
     const eDate = req.body.eDate;
     const description = req.body.desc;
     const tSeat = req.body.tSeat;
+    const tags = req.body.tag;
     let path = '';
     if (req.body.file)
         path = req.body.file.path;
     
-    return model.event.createEvent(name, sDate, eDate, description, req.userID, path, tSeat)
+    return model.event.createEvent(name, sDate, eDate, description, req.userID, path, tSeat , tags)
         .then((event) => {
             let date = event.sDate;
             date.setMinutes(0);
@@ -99,7 +100,8 @@ router.post('/live', function (req, res) {
 });
 
 router.post('/csv', function (req, res) {
-    return model.status.find({ _id : req.body.eventID, going : true }, { userID : 1 })
+
+    return model.status.find({ event : req.body.eventID, going: true}, { userID : 1 })
         .populate({
             path : "userID",
             select : "name email mobile"
@@ -110,20 +112,22 @@ router.post('/csv', function (req, res) {
                 dataset.push(item.userID);
             });
             const data = { name : req.body.eventID, dataset : dataset };
-            
             let options = {
                 method : 'POST',
                 uri : xConfig.pyServer + '/getCSV',
                 form : {
-                    data : data
+                    data : JSON.stringify(data)
                 }
             };
-            
+            console.log(options);
+
             request(options)
-                .then(function (parsedBody) {
+                .then(function (parsedBody ,  x) {
                     let reply = response(statusCode.Ok);
+                    parsedBody = JSON.parse(parsedBody);
                     reply.body.link = parsedBody.path;
-                    res.json(reply);
+                    console.log(parsedBody + x);
+                    res.json(parsedBody);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -168,6 +172,7 @@ router.post('/graph', function (req, res) {
             request(options)
                 .then(function (parsedBody) {
                     let reply = response(statusCode.Ok);
+                    parsedBody=JSON.parse(parsedBody);
                     reply.body.path = parsedBody.path;
                     res.json(reply);
                 })

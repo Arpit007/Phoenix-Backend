@@ -19,8 +19,8 @@ event.getEventByID = (id, throwOnNull = false) => {
         });
 };
 
-event.createEvent = (name, sDate, eDate, description, organiserID, path , tSeat) => {
-    console.log(name + sDate + eDate + description + organiserID + path + " " + tSeat);
+event.createEvent = (name, sDate, eDate, description, organiserID, path , tSeat , tags) => {
+    console.log(name + sDate + eDate + description + organiserID + path + "  "+tags+  " " + tSeat);
     return event
         .create({
             name : name,
@@ -28,6 +28,7 @@ event.createEvent = (name, sDate, eDate, description, organiserID, path , tSeat)
             eDate : eDate,
             description : description,
             organiser : organiserID,
+            tags: tags,
             image : path,
             totalSeats: tSeat
         });
