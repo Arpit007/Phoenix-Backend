@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/materialize.min.css" media="screen,projection">
+	<link rel="stylesheet" type="text/css" href="css/myevents.css">
+</head>
+<body>
+
+<a href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large white z-depth-0"><i class="material-icons black-text">menu</i></a>
+
+<ul id="slide-out" class="side-nav fixed">
+  <div class="container center">
+  	<li><img src="images/profile_pic.png" class="profile_pic"></li>
+  	<li><h4 id="username">Rishabh Chanana</h4></li>
+  	<li><p id="user-email">rishabhchanana97@gmail.com</p></li>
+  	<li><a href="dashboard.html">Dashboard</a></li>
+  </div>
+</ul>
+
+<main>
+	<h4>Events you hosted</h4>
+		<div>
+			<ul class="collapsible z-depth-1" data-collapsible="accordion" id="prev-hosted-events">
+		  </ul>
+		</div>
+	<h4>Events you attended</h4>
+		<div>
+			<ul class="collapsible z-depth-1" data-collapsible="accordion" id="attented-events">
+				
+		  </ul>
+		</div>
+</main>
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red waves-effect waves-light" id="log-out-btn">
+    <i class="large material-icons">exit_to_app</i>
+  </a>
+</div>
+
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/hammer.min.js"></script>
+<script src="js/materialize.min.js"></script>
+<script src="js/get_my_events.js"></script>
+<script src="js/myevents.js"></script>
+</html>
